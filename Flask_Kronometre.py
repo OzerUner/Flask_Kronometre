@@ -29,13 +29,11 @@ class AnimatedLabel(QWidget):
         painter = QPainter(self)
         rect = self.rect()
 
-        # Arka plan animasyonu (renk geçişi)
         grad_hue = fmod(self.hue_phase, 360) / 360
         c1 = QColor.fromHslF(grad_hue, 0.5, 0.9)
         c2 = QColor.fromHslF(fmod(grad_hue + 0.15,1.0), 0.6, 0.85)
         c3 = QColor.fromHslF(fmod(grad_hue + 0.3,1.0), 0.7, 0.8)
 
-        # Yatay degrade çizimi
         for x in range(rect.width()):
             t = x / rect.width()
             if t < 0.5:
@@ -49,7 +47,6 @@ class AnimatedLabel(QWidget):
             painter.setPen(QColor(int(r), int(g), int(b)))
             painter.drawLine(x, 0, x, rect.height())
 
-        # Yazı rengini hue'yu tamamlayıcı koyu ton yapalım
         text_hue = fmod(self.hue_phase + 180, 360) / 360
         text_color = QColor.fromHslF(text_hue, 0.9, 0.3)
 
@@ -65,33 +62,27 @@ class ModernStopwatch(QWidget):
         self.setWindowTitle("Kronometre")
         self.resize(520, 440)
 
-        # Timer
         self.timer = QTimer()
         self.timer.timeout.connect(self._on_frame)
         self.last_time = perf_counter()
 
-        # Zamanlama
         self.elapsed_ms = 0.0
         self.target_ms = None
         self.running = False
         self.is_countdown = False
 
-        # Layout
         main_layout = QVBoxLayout(self)
         main_layout.setSpacing(12)
 
-        # Sekmeler
         self.tabs = QTabWidget()
         main_layout.addWidget(self.tabs)
 
-        # Kronometre sekmesi
         stopwatch_tab = QWidget()
         st_layout = QVBoxLayout(stopwatch_tab)
 
         self.time_label = AnimatedLabel()
         st_layout.addWidget(self.time_label)
 
-        # Butonlar
         btn_layout = QHBoxLayout()
         self.start_btn = self.create_button("Başlat", self.start_pause)
         self.reset_btn = self.create_button("Sıfırla", self.reset)
@@ -104,14 +95,12 @@ class ModernStopwatch(QWidget):
         st_layout.addLayout(btn_layout)
         self.tabs.addTab(stopwatch_tab, "Kronometre")
 
-        # Tur kayıtları sekmesi
         laps_tab = QWidget()
         laps_layout = QVBoxLayout(laps_tab)
         self.laps_list = QListWidget()
         laps_layout.addWidget(self.laps_list)
         self.tabs.addTab(laps_tab, "Tur Kayıtları")
 
-        # Arka planı tamamen beyaz yapalım (istersen değiştir)
         self.setStyleSheet("background: #e0f0ff;")
 
     def create_button(self, text, slot):
@@ -219,3 +208,4 @@ if __name__ == "__main__":
     window = ModernStopwatch()
     window.show()
     sys.exit(app.exec_())
+
